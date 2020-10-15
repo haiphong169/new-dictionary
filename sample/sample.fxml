@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <children>
+        <AnchorPane layoutX="21.0" layoutY="10.0" prefHeight="580.0" prefWidth="275.0" style="-fx-background-color: #00FFFF;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <children>
+                <TextField fx:id="textField" layoutX="14.0" layoutY="14.0" onAction="#searchWithEnter" onKeyPressed="#navigate" onKeyReleased="#searchWord" prefHeight="25.0" prefWidth="255.0" promptText="Enter a word" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                <ListView fx:id="listView" layoutX="14.0" layoutY="90.0" onMouseClicked="#displayContent" prefHeight="400.0" prefWidth="248.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="383.0" layoutY="92.0" prefHeight="580.0" prefWidth="450.0" style="-fx-background-color: #DC143C;" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <children>
+                <TextArea fx:id="textArea" layoutX="10.0" layoutY="90.0" onMouseClicked="#change" prefHeight="400.0" prefWidth="430.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                <Button fx:id="saveButton" disable="true" layoutX="388.0" layoutY="59.0" mnemonicParsing="false" onAction="#save" text="Save" AnchorPane.rightAnchor="10.0" />
+                <Button fx:id="removeButton" disable="true" layoutX="10.0" layoutY="59.0" mnemonicParsing="false" onAction="#remove" text="Remove word" AnchorPane.leftAnchor="10.0" />
+                <ImageView fx:id="speaker" fitHeight="43.0" fitWidth="48.0" layoutX="322.0" layoutY="47.0" onMouseClicked="#speak" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <image>
+                        <Image url="@../speaker.png" />
+                    </image>
+                </ImageView>
+                <Button fx:id="nextSceneButton" layoutX="346.0" layoutY="541.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Add a word" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
