@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller2">
+    <children>
+        <AnchorPane layoutX="21.0" layoutY="10.0" prefHeight="580.0" prefWidth="275.0" style="-fx-background-color: #00FFFF;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <children>
+                <TextField fx:id="textField" layoutX="40.0" layoutY="14.0" onAction="#searchWithEnter" onKeyPressed="#navigate" onKeyReleased="#searchWord" prefHeight="25.0" prefWidth="225.0" promptText="Enter a word" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="10.0" />
+                <ListView fx:id="listView" layoutX="10.0" layoutY="98.0" onKeyReleased="#displayContent" onMouseClicked="#displayContent" prefHeight="400.0" prefWidth="248.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../back.png" />
+                    </image>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </ImageView>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="383.0" layoutY="92.0" prefHeight="580.0" prefWidth="450.0" style="-fx-background-color: #DC143C;" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <children>
+                <Button fx:id="removeButton" disable="true" layoutX="10.0" layoutY="59.0" mnemonicParsing="false" onAction="#remove" text="Remove word" AnchorPane.leftAnchor="10.0" />
+                <ImageView fx:id="speaker" fitHeight="43.0" fitWidth="48.0" layoutX="322.0" layoutY="47.0" onMouseClicked="#speak" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <image>
+                        <Image url="@../speaker.png" />
+                    </image>
+                </ImageView>
+                <Button fx:id="addWord" layoutX="346.0" layoutY="541.0" mnemonicParsing="false" onAction="#add" prefHeight="25.0" prefWidth="90.0" text="Add a word" />
+            <WebView fx:id="webView" layoutX="10.0" layoutY="98.0" prefHeight="400.0" prefWidth="430.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+            <Label fx:id="label" layoutX="14.0" layoutY="98.0" prefHeight="43.0" prefWidth="423.0">
+               <font>
+                  <Font name="Snap ITC" size="30.0" />
+               </font>
+            </Label>
+            <AnchorPane fx:id="changeWord" layoutX="-202.0" layoutY="110.0" prefHeight="372.0" prefWidth="574.0" style="-fx-background-color: #8A2BE2;" visible="false">
+               <children>
+                  <TextArea fx:id="change_textArea" layoutX="19.0" layoutY="86.0" prefHeight="269.0" prefWidth="543.0" promptText="Enter the new translation..." />
+                  <Button fx:id="change_backButton" layoutX="19.0" layoutY="14.0" mnemonicParsing="false" onAction="#exitChange" text="Back" />
+                  <Button fx:id="change_saveButton" layoutX="501.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveChange" text="Save" />
+               </children>
+            </AnchorPane>
+            <Button fx:id="edit" disable="true" layoutX="375.0" layoutY="59.0" mnemonicParsing="false" onAction="#changeMode" prefHeight="25.0" prefWidth="65.0" text="Edit" />
+            <AnchorPane fx:id="addNewWord" layoutX="-234.0" layoutY="120.0" prefHeight="400.0" prefWidth="638.0" style="-fx-background-color: #6495ED;" visible="false">
+               <children>
+                  <TextArea fx:id="add_english" layoutX="14.0" layoutY="54.0" prefHeight="334.0" prefWidth="200.0" promptText="Enter a word..." />
+                  <TextArea fx:id="add_translation" layoutX="268.0" layoutY="56.0" prefHeight="334.0" prefWidth="356.0" promptText="...and its translation" />
+                  <Button fx:id="add_back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#exitAdd" text="Back" />
+                  <Button fx:id="add_save" layoutX="583.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveAdd" text="Save" />
+               </children>
+            </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

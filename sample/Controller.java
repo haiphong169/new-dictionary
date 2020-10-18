@@ -2,27 +2,30 @@ package sample;
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 public class Controller {
 
     Dictionary dictionary = new Dictionary();
     int index = -1;
+
+    @FXML
+    public Label label;
 
     @FXML
     public Button nextSceneButton;
@@ -60,13 +63,22 @@ public class Controller {
     //search when a item in listview get selected
     public void searchWord() {
         String searchedWord = textField.getText().trim();
-        if (dictionary.searchedWords(searchedWord).isEmpty()) {
-            return;
-        }
-        listView.getItems().clear();
-        ArrayList<String> arr = dictionary.searchedWords(searchedWord);
-        for (String word : arr) {
-            listView.getItems().add(word);
+        if (searchedWord.equals("")) {
+            listView.getItems().clear();
+            ArrayList<String> arr_searchedWord = new ArrayList<>(dictionary.history);
+            Collections.reverse(arr_searchedWord);
+            for (String s : arr_searchedWord) {
+                listView.getItems().add(s);
+            }
+        } else {
+            if (dictionary.searchedWords(searchedWord).isEmpty()) {
+                return;
+            }
+            listView.getItems().clear();
+            ArrayList<String> arr = dictionary.searchedWords(searchedWord);
+            for (String word : arr) {
+                listView.getItems().add(word);
+            }
         }
     }
 
@@ -101,18 +113,24 @@ public class Controller {
     public void searchWithEnter() {
         String searchedWord = textField.getText().trim();
         if (dictionary.dictionary.containsKey(searchedWord)) {
-            textArea.setText(dictionary.dictionary.get(searchedWord));
+            textArea.setText("\n\n\n" + dictionary.dictionary.get(searchedWord));
             removeButton.setDisable(false);
             speaker.setVisible(true);
+            dictionary.history.remove(searchedWord);
+            dictionary.history.add(searchedWord);
+            label.setText(searchedWord);
         }
     }
 
     //display info when clicked on the listView
     public void displayContent() {
         String selectedWord = listView.getSelectionModel().getSelectedItem();
-        textArea.setText(dictionary.dictionary.get(selectedWord));
+        textArea.setText("\n\n\n" + dictionary.dictionary.get(selectedWord));
         removeButton.setDisable(false);
         speaker.setVisible(true);
+        dictionary.history.remove(selectedWord);
+        dictionary.history.add(selectedWord);
+        label.setText(selectedWord);
     }
 
     //show a confirmation alert and return res
@@ -155,19 +173,16 @@ public class Controller {
         }
         removeButton.setDisable(true);
         textArea.clear();
+        label.setText("");
         searchWord();
     }
 
-    public void next(ActionEvent event) {
-        try {
-            Parent add_word = FXMLLoader.load(getClass().getResource("addWord.fxml"));
-            Scene addNewWord = new Scene(add_word);
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(addNewWord);
-            window.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void changeScene(ActionEvent event) throws IOException {
+        Parent add_word = FXMLLoader.load(getClass().getResource("addWord.fxml"));
+        Scene addNewWord = new Scene(add_word);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(addNewWord);
+        window.show();
     }
 
     public void speak() {
@@ -180,5 +195,42 @@ public class Controller {
         Voice voice = vm.getVoice("kevin16");
         voice.allocate();
         voice.speak(currentWord);
+    }
+
+    public void changeBackToDictionary(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Scene back = new Scene(root);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(back);
+        window.show();
+    }
+
+    public void saveNewWord() {
+        String s1 = englishWord.getText();
+        String s2 = translation.getText();
+        System.out.println(s1);
+        System.out.println(s2);
+        if (!s1.equals("") && !s2.equals("")) {
+            dictionary.dictionary.put(s1, s2);
+        }
+    }
+
+    public void back(){
+        if(dictionary.history.size()>0){
+            String lastWord = null;
+            for (String value : dictionary.history) {
+                lastWord = value;
+            }
+            dictionary.history.remove(lastWord);
+            textField.setText(lastWord);
+            textArea.setText("\n\n\n" + dictionary.dictionary.get(lastWord));
+            label.setText(lastWord);
+            listView.getItems().clear();
+            ArrayList<String> arr = new ArrayList<>(dictionary.history);
+            Collections.reverse(arr);
+            for(String s : arr){
+                listView.getItems().add(s);
+            }
+        }
     }
 }

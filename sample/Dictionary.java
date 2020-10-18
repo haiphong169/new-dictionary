@@ -2,20 +2,38 @@ package sample;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.*;
 import java.util.*;
 
 public class Dictionary {
-    //Map<String, String> dictionary = new LinkedHashMap<>();
-    SortedMap<String,String> dictionary = new TreeMap<String,String>(new Comparator<String>() {
+    Map<String, String> dictionary = new LinkedHashMap<>();
+    Set<String> history = new LinkedHashSet<>();
+    /*SortedMap<String,String> dictionary = new TreeMap<String,String>(new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
             return o1.compareTo(o2);
         }
-    });
+    });*/
 
-    Dictionary() {
+    Dictionary(){
         try {
-            File file = new File("C:\\Users\\lapto\\Java\\TestSceneBuilder\\src\\dictionary.txt");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dictionary","root","tomtom169");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from tbl_edict");
+            while (resultSet.next()){
+                String english = resultSet.getString("word");
+                String translation = resultSet.getString("detail");
+                dictionary.put(english,translation);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*Dictionary() {
+        try {
+            File file = new File("C:\\Users\\lapto\\Java\\DictionaryWithGui\\src\\dictionary.txt");
             Scanner scan = new Scanner(file);
             String english = "";
             String explaination = "";
@@ -45,7 +63,7 @@ public class Dictionary {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     ArrayList<String> searchedWords(String input) {
         ArrayList<String> res = new ArrayList<>();
