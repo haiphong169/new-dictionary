@@ -219,6 +219,7 @@ public class Controller2 {
             dictionary.dictionary.replace(currentWord, newTranslation);
             exitChange();
             webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(currentWord));
+            change_textArea.clear();
         }
     }
 
@@ -236,6 +237,9 @@ public class Controller2 {
         if (alert().equals(ButtonType.OK)) {
             dictionary.dictionary.put(eng, trans);
             exitAdd();
+            add_english.clear();
+            add_translation.clear();
+            searchWord();
         }
     }
 

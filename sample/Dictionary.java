@@ -6,14 +6,14 @@ import java.sql.*;
 import java.util.*;
 
 public class Dictionary {
-    Map<String, String> dictionary = new LinkedHashMap<>();
+    //Map<String, String> dictionary = new LinkedHashMap<>();
     Set<String> history = new LinkedHashSet<>();
-    /*SortedMap<String,String> dictionary = new TreeMap<String,String>(new Comparator<String>() {
+    SortedMap<String,String> dictionary = new TreeMap<String,String>(new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
             return o1.compareTo(o2);
         }
-    });*/
+    });
 
     Dictionary(){
         try {
