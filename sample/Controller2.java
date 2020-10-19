@@ -131,6 +131,7 @@ public class Controller2 {
             edit.setDisable(false);
         }
         else{
+            label.setText("");
             webView.getEngine().loadContent("Không có!");
         }
     }
