@@ -130,6 +130,9 @@ public class Controller2 {
             label.setText(searchedWord);
             edit.setDisable(false);
         }
+        else{
+            webView.getEngine().loadContent("Không có!");
+        }
     }
 
     //display info when clicked on the listView
