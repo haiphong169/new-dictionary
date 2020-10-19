@@ -17,7 +17,7 @@ public class Dictionary {
 
     Dictionary(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dictionary","root","tomtom169");
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from tbl_edict");

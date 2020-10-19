@@ -166,11 +166,11 @@ public class Controller2 {
             dictionary.dictionary.remove(currentWord);
             /*textField.clear();
             textField.requestFocus();*/
+            removeButton.setDisable(true);
+            webView.getEngine().loadContent("");
+            label.setText("");
+            searchWord();
         }
-        removeButton.setDisable(true);
-        webView.getEngine().loadContent("");
-        label.setText("");
-        searchWord();
     }
 
     public void speak() {
