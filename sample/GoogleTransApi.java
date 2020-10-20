@@ -11,8 +11,8 @@ import java.io.InputStream;
 public class GoogleTransApi {
     public static String translate(String s) {
         Translator translate = Translator.getInstance();
-        String text = translate.translate(s + "&client=tw-ob", Language.ENGLISH, Language.VIETNAMESE);
-        return text;
+        return translate.translate(s + "&client=tw-ob", Language.ENGLISH, Language.VIETNAMESE);
+
     }
 
     public static void Speak(String s) {
