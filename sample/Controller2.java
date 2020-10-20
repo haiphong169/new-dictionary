@@ -9,14 +9,36 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
+
+import static sample.GoogleTransApi.*;
+
 
 public class Controller2 {
 
     Dictionary dictionary = new Dictionary();
     int index = -1;
+
+    @FXML
+    public ImageView api_speaker;
+
+    @FXML
+    public Button changeToAPI;
+
+    @FXML
+    public AnchorPane api;
+
+    @FXML
+    public Button api_back;
+
+    @FXML
+    public TextArea api_eng;
+
+    @FXML
+    public TextArea api_trans;
 
     @FXML
     public AnchorPane addNewWord;
@@ -129,8 +151,7 @@ public class Controller2 {
             dictionary.history.add(searchedWord);
             label.setText(searchedWord);
             edit.setDisable(false);
-        }
-        else{
+        } else {
             label.setText("");
             webView.getEngine().loadContent("Không có!");
         }
@@ -174,7 +195,7 @@ public class Controller2 {
         }
     }
 
-    public void speak() {
+    /*public void speak() {
         String currentWord = listView.getSelectionModel().getSelectedItem();
         if (currentWord == null) {
             currentWord = textField.getText();
@@ -184,6 +205,14 @@ public class Controller2 {
         Voice voice = vm.getVoice("kevin16");
         voice.allocate();
         voice.speak(currentWord);
+    }*/
+
+    public void speak() {
+        String currentWord = listView.getSelectionModel().getSelectedItem();
+        if (currentWord == null) {
+            currentWord = textField.getText();
+        }
+        Speak(currentWord);
     }
 
     public void back() {
@@ -245,6 +274,26 @@ public class Controller2 {
             add_translation.clear();
             searchWord();
         }
+    }
+
+    public void realtimeTrans(){
+        String eng = api_eng.getText();
+        api_trans.setText(translate(eng));
+        api_speaker.setVisible(true);
+    }
+
+    public void changeToAPI(){
+        api.setVisible(true);
+    }
+
+    public void backFromAPI(){
+        api_eng.clear();
+        api_trans.clear();
+        api.setVisible(false);
+    }
+
+    public void apiSpeak(){
+        Speak(api_eng.getText());
     }
 
 }

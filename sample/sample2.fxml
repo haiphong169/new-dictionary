@@ -62,6 +62,30 @@
                   <Button fx:id="add_save" layoutX="583.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveAdd" text="Save" />
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="api" layoutX="-212.0" layoutY="47.0" prefHeight="488.0" prefWidth="598.0" style="-fx-background-color: #F8F8FF;" visible="false">
+               <children>
+                  <TextArea fx:id="api_eng" layoutX="11.0" layoutY="33.0" onKeyReleased="#realtimeTrans" prefHeight="220.0" prefWidth="574.0" promptText="Enter something...">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <TextArea fx:id="api_trans" layoutX="11.0" layoutY="261.0" prefHeight="220.0" prefWidth="574.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <Button fx:id="api_back" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" onAction="#backFromAPI" text="Back" />
+                  <ImageView fx:id="api_speaker" fitHeight="25.0" fitWidth="41.0" layoutX="559.0" layoutY="8.0" onMouseClicked="#apiSpeak" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../speaker.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <Button fx:id="changeToAPI" layoutX="185.0" layoutY="541.0" mnemonicParsing="false" onAction="#changeToAPI" text="Use Google Translate API" />
             </children>
         </AnchorPane>
     </children>
