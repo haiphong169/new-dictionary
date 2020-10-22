@@ -212,6 +212,15 @@ public class Controller2 {
         return res.orElse(ButtonType.CANCEL);
     }
 
+    public ButtonType alertAdd() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Warning");
+        alert.setHeaderText("The dictionary already contained this word. Want to replace instead?");
+        Optional<ButtonType> res = alert.showAndWait();
+
+        return res.orElse(ButtonType.CANCEL);
+    }
+
     public void remove() {
         String currentWord = listView.getSelectionModel().getSelectedItem();
         if (currentWord == null) {
@@ -300,12 +309,22 @@ public class Controller2 {
     public void saveAdd() {
         String eng = add_english.getText();
         String trans = add_translation.getText();
-        if (alert().equals(ButtonType.OK)) {
-            dictionary.dictionary.put(eng, trans);
-            exitAdd();
-            add_english.clear();
-            add_translation.clear();
-            searchWord();
+        if (!dictionary.dictionary.containsKey(eng)) {
+            if (alert().equals(ButtonType.OK)) {
+                dictionary.dictionary.put(eng, trans);
+                exitAdd();
+                add_english.clear();
+                add_translation.clear();
+                searchWord();
+            }
+        } else {
+            if(alertAdd().equals(ButtonType.OK)){
+                dictionary.dictionary.replace(eng,trans);
+                exitAdd();
+                add_english.clear();
+                add_translation.clear();
+                searchWord();
+            }
         }
     }
 
