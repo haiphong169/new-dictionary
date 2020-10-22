@@ -310,10 +310,16 @@ public class Controller2 {
         }
     }
 
-    public void realtimeTrans() {
+    public void realtimeTrans(KeyEvent keyEvent) {
         String eng = api_eng.getText();
         api_trans.setText(translate(eng));
         api_speaker.setVisible(true);
+        /*KeyCode keyCode = keyEvent.getCode();
+        if(keyCode == KeyCode.UP){
+            String eng = api_eng.getText();
+            api_trans.setText(translate(eng));
+            api_speaker.setVisible(true);
+        }*/
     }
 
     public void changeToAPI() {
