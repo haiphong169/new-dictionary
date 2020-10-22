@@ -21,7 +21,6 @@ import static sample.GoogleTransApi.*;
 public class Controller2 {
 
     Dictionary dictionary = new Dictionary();
-    int index = -1;
 
     @FXML
     public ImageView api_speaker;
