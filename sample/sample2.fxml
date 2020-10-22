@@ -17,7 +17,7 @@
         <AnchorPane layoutX="21.0" layoutY="10.0" prefHeight="580.0" prefWidth="275.0" style="-fx-background-color: #00FFFF;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
                 <TextField fx:id="textField" layoutX="40.0" layoutY="14.0" onAction="#searchWithEnter" onKeyPressed="#navigate" onKeyReleased="#searchWord" prefHeight="25.0" prefWidth="225.0" promptText="Enter a word" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="10.0" />
-                <ListView fx:id="listView" layoutX="10.0" layoutY="98.0" onKeyReleased="#displayContent" onMouseClicked="#displayContent" prefHeight="400.0" prefWidth="248.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                <ListView fx:id="listView" layoutX="10.0" layoutY="98.0" onKeyReleased="#displayContentwithKey" onMouseClicked="#displayContent" prefHeight="400.0" prefWidth="248.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                 <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../back.png" />

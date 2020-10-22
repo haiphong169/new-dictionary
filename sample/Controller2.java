@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 
@@ -115,6 +116,14 @@ public class Controller2 {
 
     public void navigate(KeyEvent keyEvent) {
         KeyCode keyCode = keyEvent.getCode();
+        if (keyCode == KeyCode.DOWN) {
+            listView.requestFocus();
+            listView.getSelectionModel().select(0);
+        }
+    }
+
+    /*public void navigate(KeyEvent keyEvent) {
+        KeyCode keyCode = keyEvent.getCode();
         if (keyCode != KeyCode.DOWN && keyCode != KeyCode.UP) {
             index = -1;
         }
@@ -138,7 +147,7 @@ public class Controller2 {
             listView.getSelectionModel().select(index);
             displayContent();
         }
-    }
+    }*/
 
     //search when enter key is pressed
     public void searchWithEnter() {
@@ -158,7 +167,8 @@ public class Controller2 {
     }
 
     //display info when clicked on the listView
-    public void displayContent() {
+    public void displayContentwithKey(KeyEvent keyEvent) {
+        KeyCode keyCode = keyEvent.getCode();
         String selectedWord = listView.getSelectionModel().getSelectedItem();
         webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(selectedWord));
         removeButton.setDisable(false);
@@ -167,6 +177,26 @@ public class Controller2 {
         dictionary.history.add(selectedWord);
         label.setText(selectedWord);
         edit.setDisable(false);
+        if (listView.getSelectionModel().getSelectedIndex() == 0 && keyCode == KeyCode.UP) {
+            textField.requestFocus();
+        }
+    }
+
+    public void displayContent() {
+        String selectedWord = listView.getSelectionModel().getSelectedItem();
+        if (dictionary.dictionary.containsKey(selectedWord)) {
+            webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(selectedWord));
+            removeButton.setDisable(false);
+            speaker.setVisible(true);
+            dictionary.history.remove(selectedWord);
+            dictionary.history.add(selectedWord);
+            label.setText(selectedWord);
+            edit.setDisable(false);
+        }
+        else {
+            label.setText("");
+            webView.getEngine().loadContent("Không có!");
+        }
     }
 
     //show a confirmation alert and return res
@@ -186,8 +216,8 @@ public class Controller2 {
         }
         if (alert().equals(ButtonType.OK)) {
             dictionary.dictionary.remove(currentWord);
-            /*textField.clear();
-            textField.requestFocus();*/
+            textField.clear();
+            textField.requestFocus();
             removeButton.setDisable(true);
             webView.getEngine().loadContent("");
             label.setText("");
@@ -276,23 +306,23 @@ public class Controller2 {
         }
     }
 
-    public void realtimeTrans(){
+    public void realtimeTrans() {
         String eng = api_eng.getText();
         api_trans.setText(translate(eng));
         api_speaker.setVisible(true);
     }
 
-    public void changeToAPI(){
+    public void changeToAPI() {
         api.setVisible(true);
     }
 
-    public void backFromAPI(){
+    public void backFromAPI() {
         api_eng.clear();
         api_trans.clear();
         api.setVisible(false);
     }
 
-    public void apiSpeak(){
+    public void apiSpeak() {
         Speak(api_eng.getText());
     }
 
