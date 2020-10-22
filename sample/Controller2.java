@@ -167,18 +167,23 @@ public class Controller2 {
     }
 
     //display info when clicked on the listView
-    public void displayContentwithKey(KeyEvent keyEvent) {
+    public void displayContentWithKey(KeyEvent keyEvent) {
         KeyCode keyCode = keyEvent.getCode();
-        String selectedWord = listView.getSelectionModel().getSelectedItem();
-        webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(selectedWord));
-        removeButton.setDisable(false);
-        speaker.setVisible(true);
-        dictionary.history.remove(selectedWord);
-        dictionary.history.add(selectedWord);
-        label.setText(selectedWord);
-        edit.setDisable(false);
         if (listView.getSelectionModel().getSelectedIndex() == 0 && keyCode == KeyCode.UP) {
             textField.requestFocus();
+        }
+        String selectedWord = listView.getSelectionModel().getSelectedItem();
+        if (dictionary.dictionary.containsKey(selectedWord)) {
+            webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(selectedWord));
+            removeButton.setDisable(false);
+            speaker.setVisible(true);
+            dictionary.history.remove(selectedWord);
+            dictionary.history.add(selectedWord);
+            label.setText(selectedWord);
+            edit.setDisable(false);
+        } else {
+            label.setText("");
+            webView.getEngine().loadContent("Không có!");
         }
     }
 
@@ -192,8 +197,7 @@ public class Controller2 {
             dictionary.history.add(selectedWord);
             label.setText(selectedWord);
             edit.setDisable(false);
-        }
-        else {
+        } else {
             label.setText("");
             webView.getEngine().loadContent("Không có!");
         }
