@@ -91,7 +91,7 @@ public class Controller2 {
     @FXML
     public ListView<String> listView;
 
-    //search when a item in listview get selected
+    //update listview
     public void searchWord() {
         String searchedWord = textField.getText().trim();
         if (searchedWord.equals("")) {
@@ -231,6 +231,7 @@ public class Controller2 {
             textField.clear();
             textField.requestFocus();
             removeButton.setDisable(true);
+            edit.setDisable(true);
             webView.getEngine().loadContent("");
             label.setText("");
             searchWord();
