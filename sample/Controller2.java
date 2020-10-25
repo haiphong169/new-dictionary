@@ -103,13 +103,19 @@ public class Controller2 {
             }
         } else {
             if (dictionary.searchedWords(searchedWord).isEmpty()) {
-                return;
+                listView.getItems().clear();
+                ArrayList<String> arr = dictionary.wrongSearch(searchedWord);
+                for (String word : arr) {
+                    listView.getItems().add(word);
+                }
+            } else {
+                listView.getItems().clear();
+                ArrayList<String> a = dictionary.searchedWords(searchedWord);
+                for (String word : a) {
+                    listView.getItems().add(word);
+                }
             }
-            listView.getItems().clear();
-            ArrayList<String> arr = dictionary.searchedWords(searchedWord);
-            for (String word : arr) {
-                listView.getItems().add(word);
-            }
+
         }
     }
 
@@ -247,6 +253,9 @@ public class Controller2 {
         String currentWord = listView.getSelectionModel().getSelectedItem();
         if (currentWord == null) {
             currentWord = textField.getText();
+        }
+        if (dictionary.dictionary.containsKey(currentWord)) {
+
         }
         if (alert().equals(ButtonType.OK)) {
             dictionary.dictionary.replace(currentWord, newTranslation);
