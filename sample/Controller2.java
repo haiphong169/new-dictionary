@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
@@ -94,7 +95,12 @@ public class Controller2 {
     //update listview
     public void searchWord() {
         String searchedWord = textField.getText().trim();
-        if (searchedWord.equals("")) {
+        listView.getItems().clear();
+        ArrayList<String> suggestion = dictionary.suggestion(searchedWord);
+        for (String word : suggestion) {
+            listView.getItems().add(word);
+        }
+        /*if (searchedWord.equals("")) {
             listView.getItems().clear();
             ArrayList<String> arr_searchedWord = new ArrayList<>(dictionary.history);
             Collections.reverse(arr_searchedWord);
@@ -110,7 +116,7 @@ public class Controller2 {
             for (String word : arr) {
                 listView.getItems().add(word);
             }
-        }
+        }*/
     }
 
     public void navigate(KeyEvent keyEvent) {
@@ -121,37 +127,31 @@ public class Controller2 {
         }
     }
 
-    /*public void navigate(KeyEvent keyEvent) {
-        KeyCode keyCode = keyEvent.getCode();
-        if (keyCode != KeyCode.DOWN && keyCode != KeyCode.UP) {
-            index = -1;
-        }
-        if (keyCode == KeyCode.DOWN) {
-            if (index < listView.getItems().size() - 1) {
-                index++;
-            }
-            if (index % 17 == 0) {
-                listView.scrollTo(index);
-            }
-            listView.getSelectionModel().select(index);
-            displayContent();
-
-        } else if (keyCode == KeyCode.UP) {
-            if (index > 0) {
-                index--;
-            }
-            if (index % 16 == 0) {
-                listView.scrollTo(index - 16);
-            }
-            listView.getSelectionModel().select(index);
-            displayContent();
-        }
-    }*/
-
     //search when enter key is pressed
-    public void searchWithEnter() {
+    public void searchWithEnter() throws SQLException, ClassNotFoundException {
         String searchedWord = textField.getText().trim();
-        if (dictionary.dictionary.containsKey(searchedWord)) {
+        if (dictionary.findWord(searchedWord) != null) {
+            Word res = dictionary.findWord(searchedWord);
+            webView.getEngine().loadContent("<br/><br/><br/>" + res.translation);
+            removeButton.setDisable(false);
+            speaker.setVisible(true);
+            label.setText(searchedWord);
+            edit.setDisable(false);
+        } else {
+            if(dictionary.findWordbyIterating(searchedWord)!=null){
+                Word res = dictionary.findWordbyIterating(searchedWord);
+                webView.getEngine().loadContent("<br/><br/><br/>" + res.translation);
+                removeButton.setDisable(false);
+                speaker.setVisible(true);
+                label.setText(searchedWord);
+                edit.setDisable(false);
+            }
+            else{
+                label.setText("");
+                webView.getEngine().loadContent("Không có!");
+            }
+        }
+        /*if (dictionary.dictionary.containsKey(searchedWord)) {
             webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(searchedWord));
             removeButton.setDisable(false);
             speaker.setVisible(true);
@@ -162,7 +162,7 @@ public class Controller2 {
         } else {
             label.setText("");
             webView.getEngine().loadContent("Không có!");
-        }
+        }*/
     }
 
     //display info when clicked on the listView
@@ -172,33 +172,58 @@ public class Controller2 {
             textField.requestFocus();
         }
         String selectedWord = listView.getSelectionModel().getSelectedItem();
-        if (dictionary.dictionary.containsKey(selectedWord)) {
-            webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(selectedWord));
+        if (dictionary.findWord(selectedWord) != null) {
+            Word res = dictionary.findWord(selectedWord);
+            webView.getEngine().loadContent("<br/><br/><br/>" + res.translation);
             removeButton.setDisable(false);
             speaker.setVisible(true);
-            dictionary.history.remove(selectedWord);
-            dictionary.history.add(selectedWord);
+            /*dictionary.history.remove(selectedWord);
+            dictionary.history.add(selectedWord);*/
             label.setText(selectedWord);
             edit.setDisable(false);
         } else {
-            label.setText("");
-            webView.getEngine().loadContent("Không có!");
+            if(dictionary.findWordbyIterating(selectedWord)!=null){
+                Word res = dictionary.findWordbyIterating(selectedWord);
+                webView.getEngine().loadContent("<br/><br/><br/>" + res.translation);
+                removeButton.setDisable(false);
+                speaker.setVisible(true);
+                /*dictionary.history.remove(selectedWord);
+                dictionary.history.add(selectedWord);*/
+                label.setText(selectedWord);
+                edit.setDisable(false);
+            }
+            else{
+                label.setText("");
+                webView.getEngine().loadContent("Không có!");
+            }
         }
     }
 
     public void displayContent() {
         String selectedWord = listView.getSelectionModel().getSelectedItem();
-        if (dictionary.dictionary.containsKey(selectedWord)) {
-            webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(selectedWord));
+        if (dictionary.findWord(selectedWord) != null) {
+            Word res = dictionary.findWord(selectedWord);
+            webView.getEngine().loadContent("<br/><br/><br/>" + res.translation);
             removeButton.setDisable(false);
             speaker.setVisible(true);
-            dictionary.history.remove(selectedWord);
-            dictionary.history.add(selectedWord);
+            /*dictionary.history.remove(selectedWord);
+            dictionary.history.add(selectedWord);*/
             label.setText(selectedWord);
             edit.setDisable(false);
         } else {
-            label.setText("");
-            webView.getEngine().loadContent("Không có!");
+            if (dictionary.findWordbyIterating(selectedWord)==null) {
+                label.setText("");
+                webView.getEngine().loadContent("Không có!");
+            } else {
+                Word res = dictionary.findWordbyIterating(selectedWord);
+                webView.getEngine().loadContent("<br/><br/><br/>" + res.translation);
+                removeButton.setDisable(false);
+                speaker.setVisible(true);
+                /*dictionary.history.remove(selectedWord);
+                dictionary.history.add(selectedWord);*/
+                label.setText(selectedWord);
+                edit.setDisable(false);
+            }
         }
     }
 
@@ -221,12 +246,30 @@ public class Controller2 {
         return res.orElse(ButtonType.CANCEL);
     }
 
-    public void remove() {
+    public void remove() throws ClassNotFoundException, SQLException {
         String currentWord = listView.getSelectionModel().getSelectedItem();
         if (currentWord == null) {
             currentWord = textField.getText();
         }
+        Word w = dictionary.findWord(currentWord);
+        if(w == null){
+            w = dictionary.findWordbyIterating(currentWord);
+        }
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dictionary", "root", "tomtom169");
+        Statement statement = connection.createStatement();
         if (alert().equals(ButtonType.OK)) {
+            statement.execute("DELETE FROM `dictionary`.`tbl_edict` WHERE (`id` = '" + w.id + "');");
+            dictionary.dictionary.remove(w);
+            /*textField.clear();
+            textField.requestFocus();*/
+            removeButton.setDisable(true);
+            edit.setDisable(true);
+            webView.getEngine().loadContent("");
+            label.setText("");
+            searchWord();
+        }
+        /*if (alert().equals(ButtonType.OK)) {
             dictionary.dictionary.remove(currentWord);
             textField.clear();
             textField.requestFocus();
@@ -235,7 +278,7 @@ public class Controller2 {
             webView.getEngine().loadContent("");
             label.setText("");
             searchWord();
-        }
+        }*/
     }
 
     /*public void speak() {
@@ -258,7 +301,7 @@ public class Controller2 {
         Speak(currentWord);
     }
 
-    public void back() {
+    /*public void back() {
         if (dictionary.history.size() > 0) {
             String lastWord = null;
             for (String value : dictionary.history) {
@@ -275,7 +318,7 @@ public class Controller2 {
                 listView.getItems().add(s);
             }
         }
-    }
+    }*/
 
     public void changeMode() {
         changeWord.setVisible(true);
@@ -285,17 +328,29 @@ public class Controller2 {
         changeWord.setVisible(false);
     }
 
-    public void saveChange() {
+    public void saveChange() throws SQLException, ClassNotFoundException {
         String newTranslation = change_textArea.getText();
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dictionary", "root", "tomtom169");
+        Statement statement = connection.createStatement();
         String currentWord = listView.getSelectionModel().getSelectedItem();
         if (currentWord == null) {
             currentWord = textField.getText();
         }
+        Word w = dictionary.findWord(currentWord);
+        if(w == null){
+            w = dictionary.findWordbyIterating(currentWord);
+        }
         if (alert().equals(ButtonType.OK)) {
-            dictionary.dictionary.replace(currentWord, newTranslation);
+            statement.execute("UPDATE `dictionary`.`tbl_edict` SET `detail` = '" + newTranslation + "' WHERE (`id` = '" + w.id + "');");
+            dictionary.dictionary.get(w.id - 1).translation = newTranslation;
+            exitChange();
+            webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(w.id - 1).translation);
+            change_textArea.clear();
+            /*dictionary.dictionary.replace(currentWord, newTranslation);
             exitChange();
             webView.getEngine().loadContent("<br/><br/><br/>" + dictionary.dictionary.get(currentWord));
-            change_textArea.clear();
+            change_textArea.clear();*/
         }
     }
 
@@ -307,10 +362,38 @@ public class Controller2 {
         addNewWord.setVisible(false);
     }
 
-    public void saveAdd() {
+    public void saveAdd() throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dictionary", "root", "tomtom169");
+        Statement statement = connection.createStatement();
         String eng = add_english.getText();
         String trans = add_translation.getText();
-        if (!dictionary.dictionary.containsKey(eng)) {
+        if ((dictionary.findWord(eng) == null) && (dictionary.findWordbyIterating(eng) == null)) {
+            if (alert().equals(ButtonType.OK)) {
+                statement.execute("INSERT INTO `dictionary`.`tbl_edict` (`word`, `detail`) VALUES ('" + eng + "', '" + trans + "');");
+                Word newWord = new Word(dictionary.dictionary.size(),eng,trans);
+                dictionary.dictionary.add(newWord);
+                exitAdd();
+                add_english.clear();
+                add_translation.clear();
+                searchWord();
+            }
+        }
+        else {
+            if (alertAdd().equals(ButtonType.OK)) {
+                Word res = dictionary.findWord(eng);
+                if(res == null){
+                    res = dictionary.findWordbyIterating(eng);
+                }
+                statement.execute("UPDATE `dictionary`.`tbl_edict` SET `detail` = '" + trans + "' WHERE (`id` = '" + res.id + "');");
+                dictionary.dictionary.get(res.id - 1).translation = trans;
+                exitAdd();
+                add_english.clear();
+                add_translation.clear();
+                searchWord();
+            }
+        }
+        /*if (!dictionary.dictionary.containsKey(eng)) {
             if (alert().equals(ButtonType.OK)) {
                 dictionary.dictionary.put(eng, trans);
                 exitAdd();
@@ -319,14 +402,14 @@ public class Controller2 {
                 searchWord();
             }
         } else {
-            if(alertAdd().equals(ButtonType.OK)){
-                dictionary.dictionary.replace(eng,trans);
+            if (alertAdd().equals(ButtonType.OK)) {
+                dictionary.dictionary.replace(eng, trans);
                 exitAdd();
                 add_english.clear();
                 add_translation.clear();
                 searchWord();
             }
-        }
+        }*/
     }
 
     public void realtimeTrans(KeyEvent keyEvent) {
