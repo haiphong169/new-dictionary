@@ -110,13 +110,49 @@ public class Dictionary {
         return null;
     }
 
-    Word findWordbyIterating(String key){
-        for(Word word : dictionary){
-            if(key.equals(word.eng)){
+    Word findWordbyIterating(String key) {
+        for (Word word : dictionary) {
+            if (key.equals(word.eng)) {
                 return word;
             }
         }
         return null;
+    }
+
+    int determineRelevance(String wordInDict, String wrongWord) {
+        if (wordInDict.length() < wrongWord.length()) {
+            return 0;
+        }
+        if (wordInDict.charAt(0) != wrongWord.charAt(0)) {
+            return 0;
+        }
+        int i = 0;
+        int j = 0;
+        int count = 0;
+        while (i < wordInDict.length() && j < wrongWord.length() && wordInDict.charAt(i) == wrongWord.charAt(j)) {
+            i++;
+            j++;
+            count++;
+        }
+        i = wordInDict.length()-1;
+        j = wrongWord.length()-1;
+        while (i > 0 && j > 0 && wordInDict.charAt(i) == wrongWord.charAt(j)) {
+            i--;
+            j--;
+            count++;
+        }
+        return count;
+    }
+
+    ArrayList<String> wrongSearch(String input) {
+        int limit = input.length()/4;
+        ArrayList<String> res = new ArrayList<>();
+        for (Word word : dictionary) {
+            if (determineRelevance(word.eng, input) >= input.length()-limit) {
+                res.add(word.eng);
+            }
+        }
+        return res;
     }
 
 }

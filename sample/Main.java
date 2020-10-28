@@ -12,6 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sample2.fxml"));
+
         primaryStage.getIcons().add(new Image("dictionary-512.png"));
         primaryStage.setTitle("Dictionary");
         primaryStage.setScene(new Scene(root, 750, 600));
